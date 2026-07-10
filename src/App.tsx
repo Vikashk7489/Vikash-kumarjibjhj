@@ -32,21 +32,25 @@ import {
   PhoneCall,
   Info,
   Sparkles,
-  Bot
+  Bot,
+  LayoutDashboard,
+  Plus
 } from 'lucide-react';
 import { allData, tickerItems, quickLinks, categoryMap, JobItem } from './data';
-import { rtdb } from './firebase';
+import AdminPanel from './components/AdminPanel';
+import { rtdb, auth } from './firebase';
 import { 
   ref,
   onValue,
   off,
   increment,
   set,
-  push
+  push,
+  update
 } from 'firebase/database';
 import ReactMarkdown from 'react-markdown';
 
-type Page = 'home' | 'jobs' | 'results' | 'admitcard' | 'answerkey' | 'syllabus' | 'notifications' | 'contact' | 'bookmarks' | 'about' | 'privacy' | 'terms' | 'disclaimer' | 'detail';
+type Page = 'home' | 'jobs' | 'results' | 'admitcard' | 'answerkey' | 'syllabus' | 'notifications' | 'contact' | 'bookmarks' | 'about' | 'privacy' | 'terms' | 'disclaimer' | 'detail' | 'admin';
 
 
 export default function App() {
@@ -57,6 +61,13 @@ export default function App() {
   const [liveTicker, setLiveTicker] = useState<string[]>([]);
   const [liveLinks, setLiveLinks] = useState<{name: string, url: string}[]>([]);
   const [postsLoading, setPostsLoading] = useState(true);
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === '/admin') {
+      setCurrentPage('admin');
+    }
+  }, []);
   
   // Fetch data from Realtime Database
   useEffect(() => {
@@ -228,7 +239,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      {/* Header */}
+      {currentPage === 'admin' ? (
+        <div className="flex-1 bg-gray-50 dark:bg-gray-950 min-h-screen">
+          <AdminPanel onBack={() => navigateTo('home')} />
+        </div>
+      ) : (
+        <>
+          {/* Header */}
           <header className="bg-red-primary text-white py-3 px-4 sticky top-0 z-[1000] shadow-md w-full">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <button className="md:hidden p-1" onClick={() => setIsMobileMenuOpen(true)}>
@@ -449,6 +466,15 @@ export default function App() {
 
           <div 
             className="pt-6 border-t border-white/10 text-[10px] opacity-60 cursor-default select-none"
+            onClick={(e) => {
+              // Secret way to access admin: Click copyright 5 times
+              const clicks = parseInt(e.currentTarget.getAttribute('data-clicks') || '0') + 1;
+              e.currentTarget.setAttribute('data-clicks', clicks.toString());
+              if (clicks >= 5) {
+                navigateTo('admin');
+                e.currentTarget.setAttribute('data-clicks', '0');
+              }
+            }}
           >
             © 2025 CareerSetu. All Rights Reserved. | सरकारी नौकरी, रिजल्ट और एडमिट कार्ड की जानकारी
           </div>
@@ -575,6 +601,8 @@ export default function App() {
         <div className="fixed bottom-20 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-2xl z-[3000] animate-in slide-in-from-bottom-5 fade-in duration-300">
           {toast}
         </div>
+      )}
+        </>
       )}
     </div>
   );

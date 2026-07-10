@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import firebaseConfig from '../firebase-applet-config.json';
 
@@ -6,6 +7,7 @@ const app = initializeApp(firebaseConfig);
 
 // Databases
 export const rtdb = getDatabase(app);
+export const auth = getAuth(app);
 
 // Connectivity check for Realtime Database
 const connectedRef = ref(rtdb, ".info/connected");
