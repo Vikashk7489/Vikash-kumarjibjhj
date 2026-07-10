@@ -63,10 +63,31 @@ export default function App() {
   const [postsLoading, setPostsLoading] = useState(true);
 
   useEffect(() => {
-    const path = window.location.pathname;
-    if (path === '/admin') {
-      setCurrentPage('admin');
-    }
+    const handleLocationChange = () => {
+      const path = window.location.pathname;
+      if (path === '/admin' || path === '/admin/') {
+        setCurrentPage('admin');
+      } else if (path === '/' || path === '') {
+        setCurrentPage('home');
+      } else if (path.startsWith('/detail/')) {
+        const id = path.split('/detail/')[1];
+        if (id) {
+          setCurrentDetailId(id);
+          setCurrentPage('detail');
+        }
+      } else {
+        const page = path.substring(1).replace(/\/$/, '') as Page;
+        const validPages: Page[] = ['home', 'jobs', 'results', 'admitcard', 'answerkey', 'syllabus', 'notifications', 'contact', 'bookmarks', 'about', 'privacy', 'terms', 'disclaimer', 'detail', 'admin'];
+        if (validPages.includes(page)) {
+          setCurrentPage(page);
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    handleLocationChange(); // Initial check
+
+    return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
   
   // Fetch data from Realtime Database
@@ -164,6 +185,7 @@ export default function App() {
   const navigateTo = (page: Page) => {
     if (page !== currentPage) {
       setHistory((prev) => [...prev, currentPage]);
+      window.history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
     }
     setCurrentPage(page);
     setCurrentDetailId(null);
@@ -175,6 +197,7 @@ export default function App() {
     setHistory((prev) => [...prev, currentPage]);
     setCurrentDetailId(id);
     setCurrentPage('detail');
+    window.history.pushState({}, '', `/detail/${id}`);
     setIsSearchOpen(false);
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
