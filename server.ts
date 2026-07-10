@@ -21,7 +21,7 @@ async function startServer() {
     }
   });
 
-  // Gemini API Route
+  // Gemini AI Route
   app.post('/api/ai/generate', async (req, res) => {
     try {
       const { prompt, systemPrompt } = req.body;
@@ -30,7 +30,7 @@ async function startServer() {
       }
 
       const response = await ai.models.generateContent({
-        model: 'gemini-flash-latest',
+        model: 'gemini-1.5-flash',
         contents: prompt,
         config: {
           systemInstruction: systemPrompt || 'You are an expert Indian job portal writer.',
@@ -41,6 +41,51 @@ async function startServer() {
       res.json({ text });
     } catch (error: any) {
       console.error('AI Generation Error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // AI Article Generator Route
+  app.post('/api/ai/generate-article', async (req, res) => {
+    try {
+      const { title, sourceUrl } = req.body;
+      if (!process.env.GEMINI_API_KEY) {
+        return res.status(500).json({ error: 'GEMINI_API_KEY is not configured in Secrets' });
+      }
+
+      const prompt = `Generate a complete, SEO-optimized job article for: "${title}". 
+      Source URL (if provided): ${sourceUrl || 'N/A'}. 
+      
+      Return ONLY a JSON object with the following structure:
+      {
+        "title": "SEO Title",
+        "slug": "url-friendly-slug",
+        "shortDescription": "Brief summary",
+        "content": "Professional formatted content in Hindi/English mix",
+        "seo": {
+          "title": "SEO Meta Title",
+          "description": "Meta Description",
+          "keywords": ["keyword1", "keyword2"]
+        },
+        "faq": [{"question": "...", "answer": "..."}],
+        "tags": ["tag1", "tag2"],
+        "importantDates": [{"label": "Start Date", "value": "TBD"}],
+        "applicationFee": [{"label": "General", "value": "0"}]
+      }`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: prompt,
+        config: {
+          systemInstruction: 'You are an expert content generator for CareerSetu. Return valid JSON only.',
+          responseMimeType: 'application/json'
+        }
+      });
+
+      const result = JSON.parse(response.text || '{}');
+      res.json(result);
+    } catch (error: any) {
+      console.error('AI Article Error:', error);
       res.status(500).json({ error: error.message });
     }
   });
