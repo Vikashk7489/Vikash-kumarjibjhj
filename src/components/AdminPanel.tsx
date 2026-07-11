@@ -71,6 +71,7 @@ import {
   AreaChart, 
   Area,
   PieChart,
+  Pie,
   Cell
 } from 'recharts';
 
@@ -307,109 +308,143 @@ export default function AdminPanel({ onBack }: { onBack: () => void }) {
   return (
     <div className="min-h-screen bg-[#0a0f1d] flex flex-col md:flex-row text-white font-sans overflow-hidden">
        {/* Sidebar */}
-       <aside className="w-full md:w-72 bg-[#161b2c] border-r border-white/5 flex flex-col p-6 space-y-1 overflow-y-auto scrollbar-thin">
-          <div className="flex items-center gap-4 mb-10 px-3 py-2 bg-white/5 rounded-2xl border border-white/5">
-             <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-red-800 rounded-xl flex items-center justify-center shadow-lg shadow-red-600/20"><Cpu size={24} /></div>
+       <aside className="w-full md:w-80 bg-[#0a0f1d] border-r border-white/5 flex flex-col p-8 space-y-1 overflow-y-auto scrollbar-thin relative z-30">
+          <div className="flex items-center gap-4 mb-12 px-2">
+             <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                <img src="/logo.png" alt="CareerSetu" className="w-8 h-8 object-contain" onError={(e) => e.currentTarget.src = 'https://api.dicebear.com/7.x/shapes/svg?seed=career'} />
+             </div>
              <div>
-                <div className="font-black italic text-lg tracking-tighter leading-none">CAREERSETU</div>
-                <div className="text-[8px] font-black text-red-500 uppercase tracking-widest mt-1">Super_Admin_v3</div>
+                <div className="font-black italic text-2xl tracking-tighter leading-none text-white">CareerSetu</div>
              </div>
           </div>
           
-          <div className="space-y-1">
-            <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-2 px-4 mt-6">Core Operations</p>
+          <div className="space-y-1.5">
             {[
-              { id: 'dashboard', label: 'DASHBOARD', icon: <LayoutDashboard size={18} /> },
-              { id: 'ai', label: 'AI GENERATOR', icon: <Bot size={18} />, hot: true },
-              { id: 'posts', label: 'POSTS', icon: <FilePlus size={18} /> },
-              { id: 'categories', label: 'CATEGORIES', icon: <Layers size={18} /> },
-              { id: 'breaking', label: 'BREAKING NEWS', icon: <Zap size={18} /> },
+              { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
+              { id: 'ai', label: 'AI Article Generator', icon: <Bot size={20} />, hot: true },
+              { id: 'posts', label: 'Posts Management', icon: <FilePlus size={20} /> },
+              { id: 'categories', label: 'Categories', icon: <Layers size={20} />, sub: true },
             ].map(item => (
-              <button key={item.id} onClick={() => { setActiveTab(item.id as any); setIsAdding(false); }} className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === item.id && !isAdding ? 'bg-red-600 text-white shadow-xl shadow-red-900/40 translate-x-2' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
+              <button key={item.id} onClick={() => { setActiveTab(item.id as any); setIsAdding(false); }} className={`w-full flex items-center justify-between px-6 py-4 rounded-xl text-sm font-medium transition-all ${activeTab === item.id && !isAdding ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
                  <div className="flex items-center gap-4">{item.icon} {item.label}</div>
-                 {item.hot && <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>}
+                 {item.sub && <ChevronRight size={14} className="text-gray-600" />}
+                 {item.hot && <span className="px-2 py-0.5 bg-red-600 text-[8px] font-black uppercase rounded-md text-white">New</span>}
               </button>
             ))}
 
-            <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-2 px-4 mt-6">Management</p>
+            <div className="mt-8 mb-4 px-6 text-[10px] font-bold text-gray-600 uppercase tracking-widest">Management</div>
             {[
-              { id: 'home-manager', label: 'HOMEPAGE', icon: <Globe size={18} /> },
-              { id: 'ads', label: 'ADVERTISEMENTS', icon: <Share2 size={18} /> },
-              { id: 'media', label: 'MEDIA LIBRARY', icon: <ImageIcon size={18} /> },
-              { id: 'faq', label: 'FAQ CENTER', icon: <List size={18} /> },
+              { id: 'home-manager', label: 'Homepage Manager', icon: <Globe size={20} />, sub: true },
+              { id: 'banner-manager', label: 'Banner Manager', icon: <ImageIcon size={20} />, sub: true },
+              { id: 'ads', label: 'Ad Manager', icon: <Share2 size={20} />, hot: true },
+              { id: 'media', label: 'Media Manager', icon: <Layers size={20} />, sub: true },
+              { id: 'pages', label: 'Pages', icon: <FilePlus size={20} />, sub: true },
+              { id: 'breaking', label: 'Breaking News', icon: <Zap size={20} />, sub: true },
+              { id: 'faq', label: 'FAQ Manager', icon: <List size={20} />, sub: true },
             ].map(item => (
-              <button key={item.id} onClick={() => { setActiveTab(item.id as any); setIsAdding(false); }} className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === item.id && !isAdding ? 'bg-red-600 text-white shadow-xl shadow-red-900/40 translate-x-2' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
-                 {item.icon} {item.label}
+              <button key={item.id} onClick={() => { setActiveTab(item.id as any); setIsAdding(false); }} className={`w-full flex items-center justify-between px-6 py-4 rounded-xl text-sm font-medium transition-all ${activeTab === item.id && !isAdding ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+                 <div className="flex items-center gap-4">{item.icon} {item.label}</div>
+                 {item.sub && <ChevronRight size={14} className="text-gray-600" />}
+                 {item.hot && <span className="px-2 py-0.5 bg-red-600 text-[8px] font-black uppercase rounded-md text-white">New</span>}
               </button>
             ))}
 
-            <p className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-2 px-4 mt-6">System</p>
+            <div className="mt-8 mb-4 px-6 text-[10px] font-bold text-gray-600 uppercase tracking-widest">System</div>
             {[
-              { id: 'analytics', label: 'ANALYTICS', icon: <BarChart3 size={18} /> },
-              { id: 'seo', label: 'SEO CENTER', icon: <Search size={18} /> },
-              { id: 'security', label: 'SECURITY', icon: <ShieldCheck size={18} /> },
-              { id: 'settings', label: 'SETTINGS', icon: <Settings size={18} /> },
-              { id: 'backups', label: 'BACKUPS', icon: <Database size={18} /> },
+              { id: 'analytics', label: 'Analytics', icon: <BarChart3 size={20} />, sub: true },
+              { id: 'seo', label: 'SEO Center', icon: <Search size={20} />, sub: true },
+              { id: 'theme-manager', label: 'Theme Manager', icon: <PieChartIcon size={20} />, sub: true },
+              { id: 'settings', label: 'Settings', icon: <Settings size={20} />, sub: true },
+              { id: 'backups', label: 'Backup Manager', icon: <Database size={20} />, sub: true },
+              { id: 'security', label: 'Security', icon: <ShieldCheck size={20} />, sub: true },
             ].map(item => (
-              <button key={item.id} onClick={() => { setActiveTab(item.id as any); setIsAdding(false); }} className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === item.id && !isAdding ? 'bg-red-600 text-white shadow-xl shadow-red-900/40 translate-x-2' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}>
-                 {item.icon} {item.label}
+              <button key={item.id} onClick={() => { setActiveTab(item.id as any); setIsAdding(false); }} className={`w-full flex items-center justify-between px-6 py-4 rounded-xl text-sm font-medium transition-all ${activeTab === item.id && !isAdding ? 'bg-red-600 text-white shadow-lg shadow-red-900/20' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}>
+                 <div className="flex items-center gap-4">{item.icon} {item.label}</div>
+                 {item.sub && <ChevronRight size={14} className="text-gray-600" />}
               </button>
             ))}
           </div>
 
           <div className="pt-12 mt-auto">
-             <button onClick={handleLogout} className="w-full bg-gray-900 text-red-500 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/5 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center gap-2"><LogOut size={16}/> EXIT_NODE</button>
+             <button onClick={handleLogout} className="w-full flex items-center gap-4 px-6 py-4 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-red-600/10 transition-all">
+                <LogOut size={20}/> Logout
+             </button>
           </div>
        </aside>
 
        {/* Main */}
-       <main className="flex-1 p-8 md:p-12 overflow-y-auto relative scrollbar-thin">
-          <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-red-600/10 via-blue-600/5 to-transparent pointer-events-none"></div>
-          
+       <main className="flex-1 bg-[#0F172A] p-8 md:p-12 overflow-y-auto relative scrollbar-thin">
           <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 relative z-10">
              <div>
-                <h2 className="text-4xl font-black italic uppercase tracking-tighter mb-2">{isAdding ? 'Asset_Calibration' : activeTab}</h2>
-                <div className="flex items-center gap-3 text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">
-                    <Clock size={12}/> {new Date().toLocaleTimeString()} <span className="text-gray-800">|</span> <div className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div> SYSTEM_ONLINE</div>
+                <h2 className="text-3xl font-bold text-white mb-1">{isAdding ? 'Create Post' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h2>
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <span>Home</span> <ChevronRight size={12} /> <span className="text-gray-400 capitalize">{activeTab}</span>
                 </div>
              </div>
-             <div className="flex items-center gap-4">
-                <button onClick={() => { setIsAdding(true); setEditingPost(null); }} className="px-8 py-4 bg-white text-black rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-2xl hover:bg-red-600 hover:text-white transition-all flex items-center gap-2 hover:translate-y-[-2px] active:scale-95"><Plus size={16}/> New Article</button>
-                <button onClick={onBack} className="w-14 h-14 rounded-2xl bg-[#161b2c] flex items-center justify-center border border-white/10 hover:bg-red-600 transition-all shadow-xl group"><Globe size={22} className="group-hover:rotate-45 transition-all" /></button>
+             <div className="flex items-center gap-4 bg-white/5 p-2 rounded-2xl">
+                <div className="flex items-center gap-2 px-4 border-r border-white/10">
+                   <Clock size={16} className="text-gray-500" />
+                   <span className="text-sm font-medium text-white">15 May 2025 - 21 May 2025</span>
+                   <ChevronRight size={16} className="text-gray-500 rotate-90" />
+                </div>
+                <div className="flex items-center gap-3 pl-4">
+                   <div className="relative">
+                      <BellRing size={20} className="text-gray-400" />
+                      <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-[10px] font-bold rounded-full flex items-center justify-center text-white">8</span>
+                   </div>
+                   <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-red-600/30">
+                         <img src={user?.photoURL || "https://api.dicebear.com/7.x/avataaars/svg?seed=admin"} alt="Admin" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="hidden lg:block">
+                         <div className="text-sm font-bold text-white leading-none">Admin</div>
+                         <div className="text-[10px] text-gray-500 mt-1">Super Admin</div>
+                      </div>
+                   </div>
+                </div>
              </div>
           </header>
 
-          {toast && <div className="fixed bottom-10 right-10 z-50 bg-[#161b2c] border border-red-600/50 px-8 py-5 rounded-2xl shadow-[0_0_40px_rgba(220,38,38,0.3)] flex items-center gap-4 animate-in slide-in-from-right duration-500"><CheckCircle2 className="text-red-500" /> <span className="text-[10px] font-black uppercase tracking-[0.2em]">{toast.message}</span></div>}
+          {toast && <div className="fixed bottom-10 right-10 z-50 bg-[#1e293b] border border-red-600/50 px-8 py-5 rounded-2xl shadow-2xl flex items-center gap-4 animate-in slide-in-from-right duration-500"><CheckCircle2 className="text-green-500" /> <span className="text-sm font-medium text-white">{toast.message}</span></div>}
 
           {activeTab === 'dashboard' && (
              <div className="space-y-10 animate-in fade-in duration-1000">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
                    {[
-                     { label: 'Total Articles', value: posts.length, icon: <FilePlus className="text-red-500" />, trend: '+12% this week' },
-                     { label: 'Cloud Reach', value: stats.totalViews.toLocaleString(), icon: <Eye className="text-blue-500" />, trend: '+8.4K today' },
-                     { label: 'Active Sessions', value: '42', icon: <TrendingUp className="text-emerald-500" />, trend: 'Live' },
-                     { label: 'Bounce Matrix', value: '24%', icon: <PieChartIcon className="text-orange-500" />, trend: '-2% improved' },
+                     { label: 'Total Articles', value: '1,248', icon: <FilePlus className="text-blue-500" />, trend: '+12.5% from last month', trendUp: true, color: 'blue' },
+                     { label: 'Published Articles', value: '1,085', icon: <CheckCircle2 className="text-green-500" />, trend: '+10.3% from last month', trendUp: true, color: 'green' },
+                     { label: 'Draft Articles', value: '163', icon: <FilePlus className="text-yellow-500" />, trend: '-5.2% from last month', trendUp: false, color: 'yellow' },
+                     { label: 'Total Categories', value: '46', icon: <Layers className="text-purple-500" />, trend: '+3.7% from last month', trendUp: true, color: 'purple' },
+                     { label: 'Total Visitors', value: '256.8K', icon: <TrendingUp className="text-red-500" />, trend: '+15.6% from last month', trendUp: true, color: 'red' },
                    ].map((item, i) => (
-                      <div key={i} className="bg-[#161b2c]/60 backdrop-blur-md p-8 rounded-[2.5rem] border border-white/5 space-y-4 hover:translate-y-[-4px] transition-all group">
+                      <div key={i} className="bg-[#1e293b]/50 backdrop-blur-md p-6 rounded-[1.5rem] border border-white/5 space-y-4 transition-all hover:bg-[#1e293b]/70">
                          <div className="flex justify-between items-start">
-                            <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">{item.icon}</div>
-                            <span className="text-[8px] font-black text-emerald-500 uppercase italic tracking-widest">{item.trend}</span>
+                            <div>
+                               <p className="text-[11px] text-gray-400 font-medium uppercase tracking-wider">{item.label}</p>
+                               <p className="text-2xl font-bold text-white mt-1">{item.value}</p>
+                            </div>
+                            <div className={`w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center`}>{item.icon}</div>
                          </div>
-                         <div>
-                            <p className="text-[9px] text-gray-500 font-black uppercase tracking-widest">{item.label}</p>
-                            <p className="text-3xl font-black italic tracking-tighter mt-1">{item.value}</p>
+                         <div className={`flex items-center gap-2 text-[10px] font-medium ${item.trendUp ? 'text-green-500' : 'text-red-500'}`}>
+                            <TrendingUp size={14} className={item.trendUp ? '' : 'rotate-180'} /> {item.trend}
                          </div>
                       </div>
                    ))}
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                   <div className="lg:col-span-2 bg-[#161b2c]/60 backdrop-blur-md p-10 rounded-[3rem] border border-white/5 space-y-8">
+                   <div className="lg:col-span-2 bg-[#1e293b]/50 backdrop-blur-md p-8 rounded-[2rem] border border-white/5 space-y-8">
                       <div className="flex justify-between items-center">
-                         <h3 className="text-sm font-black uppercase tracking-[0.2em] italic">Traffic Overview (Weekly)</h3>
-                         <div className="flex gap-4">
-                            <div className="flex items-center gap-2 text-[8px] font-black text-gray-500 uppercase tracking-widest"><div className="w-2 h-2 rounded-full bg-red-600"></div> Views</div>
-                            <div className="flex items-center gap-2 text-[8px] font-black text-gray-500 uppercase tracking-widest"><div className="w-2 h-2 rounded-full bg-blue-600"></div> Posts</div>
+                         <div>
+                            <h3 className="text-lg font-bold text-white">Visitors Overview</h3>
+                         </div>
+                         <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2 text-xs text-gray-400"><div className="w-3 h-3 rounded-sm bg-red-600"></div> Page Views</div>
+                            <div className="flex items-center gap-2 text-xs text-gray-400"><div className="w-3 h-3 rounded-sm bg-blue-600"></div> Visitors</div>
+                            <select className="bg-[#0f172a] text-white text-[10px] font-bold px-4 py-2 rounded-lg border border-white/10 outline-none">
+                               <option>Last 7 Days</option>
+                               <option>Last 30 Days</option>
+                            </select>
                          </div>
                       </div>
                       <div className="h-[350px] w-full">
@@ -420,129 +455,233 @@ export default function AdminPanel({ onBack }: { onBack: () => void }) {
                                      <stop offset="5%" stopColor="#DC2626" stopOpacity={0.3}/>
                                      <stop offset="95%" stopColor="#DC2626" stopOpacity={0}/>
                                   </linearGradient>
+                                  <linearGradient id="colorVisitors" x1="0" y1="0" x2="0" y2="1">
+                                     <stop offset="5%" stopColor="#2563EB" stopOpacity={0.3}/>
+                                     <stop offset="95%" stopColor="#2563EB" stopOpacity={0}/>
+                                  </linearGradient>
                                </defs>
-                               <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" />
-                               <XAxis dataKey="name" stroke="#666" fontSize={10} fontStyle="italic" />
-                               <YAxis stroke="#666" fontSize={10} fontStyle="italic" />
+                               <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                               <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} dy={10} />
+                               <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} dx={-10} tickFormatter={(value) => `${value}K`} />
                                <Tooltip 
-                                  contentStyle={{ backgroundColor: '#161b2c', border: '1px solid #ffffff10', borderRadius: '16px' }}
-                                  itemStyle={{ color: '#fff', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }}
+                                  contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #ffffff10', borderRadius: '16px', color: '#fff' }}
+                                  itemStyle={{ fontSize: '12px' }}
                                />
-                               <Area type="monotone" dataKey="views" stroke="#DC2626" strokeWidth={3} fillOpacity={1} fill="url(#colorViews)" />
-                               <Area type="monotone" dataKey="posts" stroke="#2563EB" strokeWidth={2} fillOpacity={0} />
+                               <Area type="monotone" dataKey="views" stroke="#DC2626" strokeWidth={3} fillOpacity={1} fill="url(#colorViews)" dot={{ r: 4, fill: '#DC2626', strokeWidth: 2, stroke: '#fff' }} />
+                               <Area type="monotone" dataKey="posts" stroke="#2563EB" strokeWidth={3} fillOpacity={1} fill="url(#colorVisitors)" dot={{ r: 4, fill: '#2563EB', strokeWidth: 2, stroke: '#fff' }} />
                             </AreaChart>
                          </ResponsiveContainer>
                       </div>
                    </div>
 
-                   <div className="bg-[#161b2c]/60 backdrop-blur-md p-10 rounded-[3rem] border border-white/5 space-y-8">
-                      <h3 className="text-sm font-black uppercase tracking-[0.2em] italic">Latest Activities</h3>
-                      <div className="space-y-6">
-                         {[1,2,3,4,5].map(i => (
-                            <div key={i} className="flex gap-4 items-center group cursor-pointer">
-                               <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-red-600 transition-colors"><Zap size={16}/></div>
-                               <div className="flex-1 min-w-0">
-                                  <p className="text-[10px] font-black uppercase italic tracking-tight truncate">New Post Calibration_{i}</p>
-                                  <p className="text-[8px] text-gray-500 font-bold uppercase mt-0.5">2 minutes ago</p>
+                   <div className="bg-[#1e293b]/50 backdrop-blur-md p-8 rounded-[2rem] border border-white/5 space-y-8 flex flex-col">
+                      <div className="flex justify-between items-center">
+                         <h3 className="text-lg font-bold text-white">Top Performing Articles</h3>
+                         <button className="text-xs text-gray-500 hover:text-white border border-white/10 px-4 py-2 rounded-lg">View All</button>
+                      </div>
+                      <div className="space-y-6 flex-1">
+                         {[
+                            { id: 1, title: 'UP Police Constable Recruitment 2025', views: '125.4K', trend: '+18.2%', img: 'https://images.unsplash.com/photo-1599508704512-2f19efd1e35f?w=100&h=100&fit=crop' },
+                            { id: 2, title: 'RRB NTPC Graduate Level Recruitment 2025', views: '98.7K', trend: '+15.7%', img: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=100&h=100&fit=crop' },
+                            { id: 3, title: 'SSC CGL Notification 2025 Out', views: '75.2K', trend: '+11.3%', img: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=100&h=100&fit=crop' },
+                            { id: 4, title: 'Bihar Deled Result 2025 Declared', views: '63.5K', trend: '+9.8%', img: 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?w=100&h=100&fit=crop' },
+                            { id: 5, title: 'IBPS PO Recruitment 2025', views: '58.9K', trend: '+7.6%', img: 'https://images.unsplash.com/photo-1603201667141-5a2d4c673378?w=100&h=100&fit=crop' },
+                         ].map((item, i) => (
+                            <div key={item.id} className="flex gap-4 items-center">
+                               <div className="text-xs font-bold text-gray-500 w-4">{item.id}</div>
+                               <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0">
+                                  <img src={item.img} alt="" className="w-full h-full object-cover" />
                                </div>
-                               <ChevronRight size={14} className="text-gray-700" />
+                               <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-bold text-white truncate">{item.title}</p>
+                                  <div className="flex items-center gap-3 mt-1">
+                                     <div className="flex items-center gap-1 text-[10px] text-gray-500"><Eye size={12}/> {item.views} Views</div>
+                                     <div className="text-[10px] text-green-500 flex items-center gap-1"><TrendingUp size={10}/> {item.trend}</div>
+                                  </div>
+                               </div>
                             </div>
                          ))}
                       </div>
-                      <button className="w-full py-4 border border-white/5 rounded-2xl text-[9px] font-black uppercase tracking-widest text-gray-500 hover:text-white hover:bg-white/5 transition-all">Full Log History</button>
                    </div>
                 </div>
 
-                {stats.topPost && (
-                   <div className="bg-gradient-to-r from-red-600/20 to-blue-600/10 p-12 rounded-[3.5rem] border border-white/10 relative overflow-hidden group">
-                      <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity rotate-12"><Zap size={180} /></div>
-                      <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-                         <div className="max-w-3xl">
-                            <p className="text-red-500 text-[10px] font-black tracking-[0.4em] uppercase italic mb-6">Master Asset Peak Performance</p>
-                            <h3 className="text-4xl font-black italic uppercase leading-[1.1] mb-8 group-hover:translate-x-2 transition-transform">{stats.topPost.title}</h3>
-                            <div className="flex flex-wrap gap-6">
-                               <div className="bg-black/20 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/10 text-center">
-                                  <p className="text-[8px] text-gray-500 uppercase font-black italic mb-1">Engagements</p>
-                                  <p className="text-2xl font-black italic">{(stats.topPost.views * 0.4).toFixed(0)}</p>
-                               </div>
-                               <div className="bg-black/20 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/10 text-center">
-                                  <p className="text-[8px] text-gray-500 uppercase font-black italic mb-1">Global Index</p>
-                                  <p className="text-2xl font-black italic">#1</p>
-                               </div>
-                            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                   <div className="lg:col-span-1 bg-[#1e293b]/50 backdrop-blur-md p-8 rounded-[2rem] border border-white/5 space-y-8">
+                      <h3 className="text-lg font-bold text-white">Visitors By Device</h3>
+                      <div className="h-[250px] relative">
+                         <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                               <Pie data={[
+                                 { name: 'Mobile', value: 65.2 },
+                                 { name: 'Desktop', value: 28.7 },
+                                 { name: 'Tablet', value: 6.1 },
+                               ]} innerRadius={60} outerRadius={80} paddingAngle={10} dataKey="value">
+                                  <Cell fill="#DC2626" />
+                                  <Cell fill="#2563EB" />
+                                  <Cell fill="#F59E0B" />
+                               </Pie>
+                            </PieChart>
+                         </ResponsiveContainer>
+                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                            <p className="text-2xl font-bold text-white">256.8K</p>
+                            <p className="text-[10px] text-gray-500 uppercase">Visitors</p>
                          </div>
-                         <button onClick={() => startEdit(stats.topPost)} className="px-10 py-5 bg-white text-black rounded-[2rem] text-[11px] font-black uppercase tracking-[0.2em] shadow-2xl hover:bg-red-600 hover:text-white transition-all transform group-hover:scale-105 active:scale-95">Calibrate Asset</button>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3">
+                         {[
+                            { name: 'Mobile', value: '65.2%', color: 'bg-red-600' },
+                            { name: 'Desktop', value: '28.7%', color: 'bg-blue-600' },
+                            { name: 'Tablet', value: '6.1%', color: 'bg-yellow-500' },
+                         ].map(item => (
+                            <div key={item.name} className="flex justify-between items-center">
+                               <div className="flex items-center gap-3">
+                                  <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+                                  <span className="text-sm text-gray-400">{item.name}</span>
+                               </div>
+                               <span className="text-sm font-bold text-white">{item.value}</span>
+                            </div>
+                         ))}
                       </div>
                    </div>
-                )}
+
+                   <div className="lg:col-span-1 bg-[#1e293b]/50 backdrop-blur-md p-8 rounded-[2rem] border border-white/5 space-y-8">
+                      <h3 className="text-lg font-bold text-white">Traffic Sources</h3>
+                      <div className="h-[250px] relative">
+                         <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                               <Pie data={[
+                                 { name: 'Direct', value: 40.5 },
+                                 { name: 'Organic Search', value: 34.6 },
+                                 { name: 'Social Media', value: 16.8 },
+                                 { name: 'Referral', value: 8.1 },
+                               ]} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
+                                  <Cell fill="#DC2626" />
+                                  <Cell fill="#2563EB" />
+                                  <Cell fill="#10B981" />
+                                  <Cell fill="#8B5CF6" />
+                               </Pie>
+                            </PieChart>
+                         </ResponsiveContainer>
+                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                            <p className="text-2xl font-bold text-white">256.8K</p>
+                            <p className="text-[10px] text-gray-500 uppercase">Visitors</p>
+                         </div>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3">
+                         {[
+                            { name: 'Direct', value: '40.5%', color: 'bg-red-600' },
+                            { name: 'Organic Search', value: '34.6%', color: 'bg-blue-600' },
+                            { name: 'Social Media', value: '16.8%', color: 'bg-green-500' },
+                            { name: 'Referral', value: '8.1%', color: 'bg-purple-500' },
+                         ].map(item => (
+                            <div key={item.name} className="flex justify-between items-center">
+                               <div className="flex items-center gap-3">
+                                  <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
+                                  <span className="text-sm text-gray-400">{item.name}</span>
+                               </div>
+                               <span className="text-sm font-bold text-white">{item.value}</span>
+                            </div>
+                         ))}
+                      </div>
+                   </div>
+
+                   <div className="lg:col-span-1 bg-[#1e293b]/50 backdrop-blur-md p-8 rounded-[2rem] border border-white/5 space-y-8">
+                      <div className="flex justify-between items-center">
+                         <h3 className="text-lg font-bold text-white">Latest Activities</h3>
+                         <button className="text-xs text-gray-500 hover:text-white">View All</button>
+                      </div>
+                      <div className="space-y-6">
+                         {[
+                            { id: 1, type: 'post', title: 'New article published', sub: 'UPSC IAS Notification 2025', time: '2 mins ago', icon: <FilePlus size={16} />, color: 'bg-blue-600' },
+                            { id: 2, type: 'category', title: 'New category added', sub: 'Defence Jobs', time: '15 mins ago', icon: <Layers size={16} />, color: 'bg-yellow-600' },
+                            { id: 3, type: 'banner', title: 'Banner updated', sub: 'Homepage Banner', time: '30 mins ago', icon: <ImageIcon size={16} />, color: 'bg-orange-600' },
+                            { id: 4, type: 'ad', title: 'Ad banner added', sub: 'Sidebar Advertisement', time: '45 mins ago', icon: <Share2 size={16} />, color: 'bg-blue-500' },
+                            { id: 5, type: 'update', title: 'Article updated', sub: 'SSC GD Constable Update', time: '1 hour ago', icon: <RefreshCw size={16} />, color: 'bg-red-600' },
+                         ].map((item) => (
+                            <div key={item.id} className="flex gap-4 group">
+                               <div className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center text-white shrink-0 shadow-lg shadow-black/20`}>{item.icon}</div>
+                               <div>
+                                  <p className="text-sm font-bold text-white leading-tight">{item.title}</p>
+                                  <p className="text-[10px] text-gray-500 mt-0.5">{item.sub}</p>
+                                  <p className="text-[10px] text-gray-600 mt-1">{item.time}</p>
+                               </div>
+                            </div>
+                         ))}
+                      </div>
+                   </div>
+
+                   <div className="lg:col-span-1 bg-[#1e293b]/50 backdrop-blur-md p-8 rounded-[2rem] border border-white/5 space-y-8">
+                      <h3 className="text-lg font-bold text-white">Quick Actions</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                         {[
+                            { id: 'ai', label: 'AI Article', icon: <Sparkles size={20} />, color: 'text-purple-500' },
+                            { id: 'posts', label: 'Add Post', icon: <Plus size={20} />, color: 'text-blue-500' },
+                            { id: 'categories', label: 'Add Category', icon: <Layers size={20} />, color: 'text-yellow-500' },
+                            { id: 'banner', label: 'Add Banner', icon: <ImageIcon size={20} />, color: 'text-green-500' },
+                            { id: 'ads', label: 'Ad Manager', icon: <Share2 size={20} />, color: 'text-indigo-500' },
+                            { id: 'media', label: 'Media Manager', icon: <Layers size={20} />, color: 'text-red-500' },
+                            { id: 'seo', label: 'SEO Center', icon: <Search size={20} />, color: 'text-blue-400' },
+                            { id: 'settings', label: 'Settings', icon: <Settings size={20} />, color: 'text-blue-600' },
+                         ].map(item => (
+                            <button key={item.id} onClick={() => { setActiveTab(item.id as any); setIsAdding(false); }} className="flex flex-col items-center justify-center p-4 bg-[#0f172a] rounded-2xl border border-white/5 hover:border-red-600/50 hover:bg-[#1e293b] transition-all group">
+                               <div className={`mb-3 ${item.color} group-hover:scale-110 transition-transform`}>{item.icon}</div>
+                               <span className="text-[10px] font-bold text-gray-400 group-hover:text-white">{item.label}</span>
+                            </button>
+                         ))}
+                      </div>
+                   </div>
+                </div>
              </div>
           )}
 
           {activeTab === 'ai' && (
               <div className="max-w-4xl mx-auto animate-in zoom-in duration-700">
-                  <div className="bg-[#161b2c]/80 backdrop-blur-xl p-12 rounded-[3.5rem] border border-white/10 space-y-12 relative overflow-hidden">
-                      <div className="absolute -top-24 -right-24 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full"></div>
+                  <div className="bg-[#1e293b]/80 backdrop-blur-xl p-12 rounded-[2.5rem] border border-white/10 space-y-12 relative overflow-hidden">
+                      <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full"></div>
                       
                       <div className="flex items-center gap-6 mb-12">
-                          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-900 rounded-[1.5rem] flex items-center justify-center shadow-xl shadow-blue-900/40"><Bot size={32} /></div>
+                          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-900/20 text-white"><Sparkles size={32} /></div>
                           <div>
-                              <h3 className="text-2xl font-black uppercase italic tracking-tighter">AI Neural Generator</h3>
-                              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mt-1">OpenCode AI Article Synth Engine v1.0</p>
+                              <h3 className="text-2xl font-bold text-white">AI Article Generator</h3>
+                              <p className="text-xs text-gray-500 mt-1">Generate high-quality job notification articles instantly with AI.</p>
                           </div>
                       </div>
 
                       <div className="space-y-8">
                           <div className="space-y-3">
-                              <label className="text-[10px] font-black uppercase text-gray-500 tracking-widest ml-4">Article Identifier / Title</label>
-                              <input 
-                                type="text" 
-                                value={aiInput.title}
-                                onChange={e => setAiInput({...aiInput, title: e.target.value})}
-                                placeholder="E.g. SSC GD Constable Recruitment 2025" 
-                                className="w-full bg-[#0a0f1d] border border-white/10 rounded-[1.5rem] px-8 py-5 text-white text-sm font-bold outline-none focus:border-blue-600 transition-all placeholder:text-gray-700" 
-                              />
-                          </div>
-                          <div className="space-y-3">
-                              <label className="text-[10px] font-black uppercase text-gray-500 tracking-widest ml-4">Source Knowledge URI (Optional)</label>
-                              <input 
-                                type="text" 
-                                value={aiInput.sourceUrl}
-                                onChange={e => setAiInput({...aiInput, sourceUrl: e.target.value})}
-                                placeholder="https://ssc.gov.in/notices/..." 
-                                className="w-full bg-[#0a0f1d] border border-white/10 rounded-[1.5rem] px-8 py-5 text-white text-sm font-bold outline-none focus:border-blue-600 transition-all placeholder:text-gray-700" 
-                              />
+                              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Article Title / Focus</label>
+                              <div className="relative group">
+                                  <input type="text" value={aiInput.title} onChange={e => setAiInput({...aiInput, title: e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-6 py-5 text-white text-lg font-bold outline-none focus:border-blue-600 transition-all pr-12" placeholder="e.g. UPSC Civil Services Exam 2025 Notification..." />
+                                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 group-focus-within:text-blue-500"><Bot size={20}/></div>
+                              </div>
                           </div>
                           
-                          <button 
-                            onClick={handleGenerateAI}
-                            disabled={isGenerating}
-                            className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 py-6 rounded-[1.5rem] font-black uppercase tracking-[0.4em] shadow-2xl shadow-blue-900/40 hover:translate-y-[-2px] transition-all disabled:opacity-50 flex items-center justify-center gap-4 group overflow-hidden relative"
-                          >
-                            {isGenerating ? (
-                                <div className="flex items-center gap-3">
-                                    <RefreshCw size={20} className="animate-spin" />
-                                    <span>Synthesizing...</span>
-                                </div>
-                            ) : (
-                                <>
-                                    <Sparkles size={20} className="group-hover:scale-125 transition-transform" />
-                                    <span>Generate Complete Article</span>
-                                </>
-                            )}
+                          <div className="space-y-3">
+                              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Source URL (Optional)</label>
+                              <input type="text" value={aiInput.sourceUrl} onChange={e => setAiInput({...aiInput, sourceUrl: e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-6 py-4 text-white text-sm font-medium outline-none focus:border-blue-600 transition-all" placeholder="https://ssc.gov.in/notices/..." />
+                          </div>
+
+                          <button onClick={handleGenerateAI} disabled={isGenerating || !aiInput.title} className="w-full py-5 bg-blue-600 text-white rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-blue-700 transition-all shadow-xl shadow-blue-900/20 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed">
+                              {isGenerating ? <><RefreshCw size={20} className="animate-spin" /> Analyzing & Generating Content...</> : <><Bot size={20}/> Generate Full Article</>}
                           </button>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12 border-t border-white/5">
-                          {[
-                              { label: 'Auto SEO', icon: <Search size={16}/> },
-                              { label: 'Auto FAQ', icon: <List size={16}/> },
-                              { label: 'Formatting', icon: <LayoutDashboard size={16}/> },
-                          ].map((item, i) => (
-                              <div key={i} className="flex items-center gap-3 text-[9px] font-black text-gray-600 uppercase tracking-widest">
-                                  <div className="w-6 h-6 bg-white/5 rounded-lg flex items-center justify-center">{item.icon}</div>
-                                  {item.label}
-                              </div>
-                          ))}
+                      <div className="pt-8 border-t border-white/5">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                              {[
+                                  { label: 'SEO Optimized', desc: 'Auto-meta tags', icon: <Search className="text-green-500" /> },
+                                  { label: 'Fact Checked', desc: 'Latest 2025 data', icon: <CheckCircle2 className="text-blue-500" /> },
+                                  { label: 'Ready to Publish', desc: 'Professional tone', icon: <Save className="text-purple-500" /> },
+                              ].map((item, i) => (
+                                  <div key={i} className="bg-white/5 p-4 rounded-xl border border-white/5">
+                                      <div className="flex items-center gap-3 mb-2">
+                                          {item.icon}
+                                          <span className="text-xs font-bold text-white">{item.label}</span>
+                                      </div>
+                                      <p className="text-[10px] text-gray-500">{item.desc}</p>
+                                  </div>
+                              ))}
+                          </div>
                       </div>
                   </div>
               </div>
@@ -552,39 +691,39 @@ export default function AdminPanel({ onBack }: { onBack: () => void }) {
              <div className="space-y-8 animate-in fade-in duration-700">
                 <div className="flex flex-col md:flex-row gap-6">
                     <div className="flex-1 relative">
-                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
-                        <input type="text" placeholder="Search Master Index..." className="w-full bg-[#161b2c] border border-white/10 rounded-2xl pl-16 pr-8 py-5 text-sm font-bold outline-none focus:border-red-600 transition-all" />
+                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                        <input type="text" placeholder="Search articles..." className="w-full bg-[#1e293b]/50 border border-white/10 rounded-2xl pl-16 pr-8 py-4 text-sm font-medium text-white outline-none focus:border-red-600 transition-all" />
                     </div>
                     <div className="flex gap-4">
-                        <select className="bg-[#161b2c] border border-white/10 rounded-2xl px-8 py-5 text-[10px] font-black uppercase outline-none focus:border-red-600 appearance-none min-w-[200px] text-center tracking-widest">
-                            <option>ALL_NODES</option>
-                            <option>JOBS_ENGINE</option>
-                            <option>RESULTS_MATRIX</option>
+                        <select className="bg-[#1e293b]/50 border border-white/10 rounded-2xl px-6 py-4 text-xs font-bold text-white outline-none focus:border-red-600 appearance-none min-w-[180px]">
+                            <option>All Categories</option>
+                            <option>Latest Jobs</option>
+                            <option>Results</option>
                         </select>
-                        <button className="w-14 h-14 bg-[#161b2c] border border-white/10 rounded-2xl flex items-center justify-center hover:bg-white/10 transition-all"><Settings size={18}/></button>
+                        <button onClick={() => { setIsAdding(true); setEditingPost(null); }} className="px-8 py-4 bg-red-600 text-white rounded-2xl text-xs font-bold hover:bg-red-700 transition-all flex items-center gap-2 shadow-lg shadow-red-900/20"><Plus size={18}/> New Article</button>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                    {posts.map(p => (
-                      <div key={p.id} className="bg-[#161b2c]/60 backdrop-blur-md p-8 rounded-[2.5rem] border border-white/5 group hover:border-red-600/30 transition-all flex flex-col h-full">
+                      <div key={p.id} className="bg-[#1e293b]/50 backdrop-blur-md p-8 rounded-[2rem] border border-white/5 group hover:bg-[#1e293b]/70 transition-all flex flex-col h-full">
                          <div className="flex justify-between items-start mb-6">
-                            <div className="flex gap-2">
-                                <span className="px-3 py-1 bg-red-600/10 text-red-500 border border-red-500/20 rounded-full text-[8px] font-black uppercase tracking-widest">{p.category}</span>
-                                {p.isHot && <span className="px-3 py-1 bg-blue-600/10 text-blue-500 border border-blue-500/20 rounded-full text-[8px] font-black uppercase tracking-widest flex items-center gap-1"><Zap size={8} /> HOT</span>}
+                            <div className="flex flex-wrap gap-2">
+                                <span className="px-3 py-1 bg-white/5 text-gray-400 border border-white/10 rounded-full text-[10px] font-bold uppercase tracking-wider">{p.category}</span>
+                                {p.isHot && <span className="px-3 py-1 bg-orange-600/10 text-orange-500 border border-orange-500/20 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1"><Zap size={10} /> Hot</span>}
                             </div>
-                            <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                               <button onClick={() => startEdit(p)} className="w-8 h-8 rounded-xl bg-blue-600/20 text-blue-500 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><Edit2 size={12}/></button>
-                               <button onClick={() => handleDelete(p.id)} className="w-8 h-8 rounded-xl bg-red-600/20 text-red-500 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all"><Trash2 size={12}/></button>
+                            <div className="flex gap-2">
+                               <button onClick={() => startEdit(p)} className="w-8 h-8 rounded-lg bg-white/5 text-blue-500 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><Edit2 size={14}/></button>
+                               <button onClick={() => handleDelete(p.id)} className="w-8 h-8 rounded-lg bg-white/5 text-red-500 flex items-center justify-center hover:bg-red-600 hover:text-white transition-all"><Trash2 size={14}/></button>
                             </div>
                          </div>
-                         <h4 className="text-sm font-black uppercase italic leading-snug mb-6 group-hover:text-red-500 transition-colors flex-1">{p.title}</h4>
+                         <h4 className="text-lg font-bold text-white leading-snug mb-6 group-hover:text-red-500 transition-colors flex-1">{p.title}</h4>
                          <div className="flex justify-between items-center pt-6 border-t border-white/5">
                             <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-1.5 text-[9px] font-black text-gray-500 uppercase tracking-widest"><Eye size={12}/> {p.views?.toLocaleString() || 0}</div>
-                                <div className="flex items-center gap-1.5 text-[9px] font-black text-gray-500 uppercase tracking-widest"><Clock size={12}/> {p.date}</div>
+                                <div className="flex items-center gap-1.5 text-xs text-gray-500"><Eye size={14}/> {p.views?.toLocaleString() || 0}</div>
+                                <div className="flex items-center gap-1.5 text-xs text-gray-500"><Clock size={14}/> {p.date}</div>
                             </div>
-                            <button onClick={() => startEdit(p)} className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all"><ChevronRight size={14}/></button>
+                            <button onClick={() => startEdit(p)} className="text-xs font-bold text-red-500 hover:text-white flex items-center gap-1 group/btn">Edit <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" /></button>
                          </div>
                       </div>
                    ))}
@@ -593,74 +732,72 @@ export default function AdminPanel({ onBack }: { onBack: () => void }) {
           )}
 
           {isAdding && (
-             <div className="bg-[#161b2c]/90 backdrop-blur-xl p-12 rounded-[3.5rem] border border-white/10 animate-in slide-in-from-bottom-12 max-w-5xl mx-auto shadow-[0_0_80px_rgba(0,0,0,0.5)] relative">
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-red-600 rounded-full flex items-center justify-center shadow-2xl z-20"><Zap size={40} className="animate-pulse" /></div>
-                
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 pb-8 border-b border-white/10 gap-6">
+             <div className="bg-[#1e293b]/90 backdrop-blur-xl p-10 rounded-[2rem] border border-white/10 animate-in slide-in-from-bottom-8 max-w-5xl mx-auto shadow-2xl relative">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 pb-8 border-b border-white/5 gap-6">
                    <div>
-                      <h3 className="text-3xl font-black uppercase tracking-tighter italic">Node Calibration_{editingPost ? 'Edit' : 'New'}</h3>
-                      <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mt-1">Manual Asset Protocol Override</p>
+                      <h3 className="text-2xl font-bold text-white">{editingPost ? 'Edit Article' : 'Create New Article'}</h3>
+                      <p className="text-xs text-gray-500 mt-1">Fill in the details to publish a new job notification.</p>
                    </div>
                    <div className="flex gap-4">
-                       <button onClick={resetForm} className="px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">Cancel</button>
-                       <button onClick={handleSubmit} className="px-10 py-4 rounded-2xl bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-xl">Deploy Assets</button>
+                       <button onClick={resetForm} className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-white hover:bg-white/10 transition-all">Cancel</button>
+                       <button onClick={handleSubmit} className="px-10 py-3 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-900/20">Publish Article</button>
                    </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-12">
-                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                       <div className="md:col-span-2 space-y-4">
-                          <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-2">Post Primary Identifier (Hindi/English)</label>
-                          <input type="text" value={formData.title} onChange={e => setFormData({...formData, title:e.target.value})} className="w-full bg-[#0a0f1d] border border-white/10 rounded-[1.5rem] px-8 py-6 text-white text-lg font-black outline-none focus:border-red-600 transition-all italic" placeholder="Enter recruitment title..." required />
+                <form onSubmit={handleSubmit} className="space-y-10">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                       <div className="md:col-span-2 space-y-3">
+                          <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Article Title</label>
+                          <input type="text" value={formData.title} onChange={e => setFormData({...formData, title:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-6 py-4 text-white text-lg font-bold outline-none focus:border-red-600 transition-all" placeholder="Enter recruitment title..." required />
                        </div>
                        
-                       <div className="space-y-4">
-                          <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-2">Node Classification</label>
-                          <select value={formData.category} onChange={e => setFormData({...formData, category:e.target.value})} className="w-full bg-[#0a0f1d] border border-white/10 rounded-[1.5rem] px-8 py-5 text-white text-xs font-black outline-none focus:border-red-600 transition-all uppercase tracking-widest">
-                             <option value="jobs">JOBS_ENGINE</option>
-                             <option value="admit-card">ADMIT_CARD_SIGNAL</option>
-                             <option value="result">RESULT_MATRIX</option>
-                             <option value="syllabus">SYLLABUS_INDEX</option>
-                             <option value="answer-key">ANSWER_KEY_DATA</option>
+                       <div className="space-y-3">
+                          <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Category</label>
+                          <select value={formData.category} onChange={e => setFormData({...formData, category:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-6 py-4 text-white text-sm font-bold outline-none focus:border-red-600 transition-all appearance-none">
+                             <option value="jobs">Latest Jobs</option>
+                             <option value="admit-card">Admit Card</option>
+                             <option value="result">Results</option>
+                             <option value="syllabus">Syllabus</option>
+                             <option value="answer-key">Answer Key</option>
                           </select>
                        </div>
                        
-                       <div className="space-y-4">
-                          <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-2">Sync Timestamp</label>
-                          <input type="date" value={formData.date} onChange={e => setFormData({...formData, date:e.target.value})} className="w-full bg-[#0a0f1d] border border-white/10 rounded-[1.5rem] px-8 py-5 text-white text-xs font-black outline-none focus:border-red-600 transition-all uppercase" />
+                       <div className="space-y-3">
+                          <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Date</label>
+                          <input type="date" value={formData.date} onChange={e => setFormData({...formData, date:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-6 py-4 text-white text-sm font-bold outline-none focus:border-red-600 transition-all" />
                        </div>
 
-                       <div className="md:col-span-2 space-y-4">
-                          <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] ml-2">Neural Payload (Full Content)</label>
-                          <textarea rows={12} value={formData.longArticle} onChange={e => setFormData({...formData, longArticle:e.target.value})} className="w-full bg-[#0a0f1d] border border-white/10 rounded-[2rem] px-8 py-8 text-white text-sm font-medium outline-none focus:border-red-600 transition-all leading-relaxed font-mono" placeholder="Enter full article content in Markdown format..." />
+                       <div className="md:col-span-2 space-y-3">
+                          <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Article Content (Markdown)</label>
+                          <textarea rows={12} value={formData.longArticle} onChange={e => setFormData({...formData, longArticle:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-6 text-white text-sm font-medium outline-none focus:border-red-600 transition-all leading-relaxed" placeholder="Enter full article content in Markdown format..." />
                        </div>
                        
-                       <div className="md:col-span-2 bg-[#0a0f1d] p-10 rounded-[2.5rem] border border-white/5 space-y-8">
-                           <h4 className="text-[11px] font-black uppercase tracking-[0.3em] italic text-blue-500 flex items-center gap-3"><Search size={16}/> SEO & Analytics Meta</h4>
-                           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                               <div className="space-y-3">
-                                   <label className="text-[9px] font-black uppercase text-gray-600 tracking-widest">Meta SEO Title</label>
-                                   <input type="text" value={formData.seo?.title || ''} onChange={e => setFormData({...formData, seo: {...formData.seo, title: e.target.value}})} className="w-full bg-white/5 border border-white/5 rounded-xl px-6 py-4 text-xs font-bold outline-none focus:border-blue-600" />
+                       <div className="md:col-span-2 bg-[#0f172a] p-8 rounded-2xl border border-white/5 space-y-6">
+                           <h4 className="text-sm font-bold text-blue-500 flex items-center gap-3"><Search size={16}/> SEO & Metadata</h4>
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                               <div className="space-y-2">
+                                   <label className="text-[10px] font-bold uppercase text-gray-500 tracking-wider">SEO Meta Title</label>
+                                   <input type="text" value={formData.seo?.title || ''} onChange={e => setFormData({...formData, seo: {...formData.seo, title: e.target.value}})} className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:border-blue-600" />
                                </div>
-                               <div className="space-y-3">
-                                   <label className="text-[9px] font-black uppercase text-gray-600 tracking-widest">Global Asset Tags</label>
-                                   <input type="text" value={formData.tags} onChange={e => setFormData({...formData, tags:e.target.value})} className="w-full bg-white/5 border border-white/5 rounded-xl px-6 py-4 text-xs font-bold outline-none focus:border-blue-600" placeholder="tag1, tag2..." />
+                               <div className="space-y-2">
+                                   <label className="text-[10px] font-bold uppercase text-gray-500 tracking-wider">Keywords (Comma Separated)</label>
+                                   <input type="text" value={formData.tags} onChange={e => setFormData({...formData, tags:e.target.value})} className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:border-blue-600" placeholder="job, recruitment, 2025..." />
                                </div>
                            </div>
                        </div>
                    </div>
                    
-                   <div className="flex gap-6 pt-10 border-t border-white/5">
-                        <button type="button" onClick={() => setFormData({...formData, isHot: !formData.isHot})} className={`flex-1 py-5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${formData.isHot ? 'bg-orange-600 text-white border-orange-500' : 'bg-white/5 text-gray-500 border-white/5'}`}>
-                            {formData.isHot ? 'SIGNAL_HOT: ACTIVE' : 'MARK_AS_HOT'}
+                   <div className="flex gap-4 pt-4">
+                        <button type="button" onClick={() => setFormData({...formData, isHot: !formData.isHot})} className={`flex-1 py-4 rounded-xl text-xs font-bold transition-all border ${formData.isHot ? 'bg-orange-600 text-white border-orange-500' : 'bg-white/5 text-gray-500 border-white/10'}`}>
+                            {formData.isHot ? 'Hot Item: Enabled' : 'Mark as Hot'}
                         </button>
-                        <button type="button" onClick={() => setFormData({...formData, isNew: !formData.isNew})} className={`flex-1 py-5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${formData.isNew ? 'bg-emerald-600 text-white border-emerald-500' : 'bg-white/5 text-gray-500 border-white/5'}`}>
-                            {formData.isNew ? 'STATUS_NEW: ACTIVE' : 'MARK_AS_NEW'}
+                        <button type="button" onClick={() => setFormData({...formData, isNew: !formData.isNew})} className={`flex-1 py-4 rounded-xl text-xs font-bold transition-all border ${formData.isNew ? 'bg-green-600 text-white border-green-500' : 'bg-white/5 text-gray-500 border-white/10'}`}>
+                            {formData.isNew ? 'New Badge: Enabled' : 'Mark as New'}
                         </button>
                    </div>
                    
-                   <button type="submit" className="w-full bg-gradient-to-r from-red-600 to-red-800 text-white py-6 rounded-[2rem] font-black uppercase tracking-[0.5em] shadow-[0_0_50px_rgba(220,38,38,0.4)] hover:scale-[1.01] transition-all active:scale-95 flex items-center justify-center gap-4">
-                      <Database size={20}/> Synchronize Nexus Database
+                   <button type="submit" className="w-full bg-red-600 text-white py-5 rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-900/20 flex items-center justify-center gap-4">
+                      <Save size={20}/> {editingPost ? 'Update Database' : 'Publish to Portal'}
                    </button>
                 </form>
              </div>
